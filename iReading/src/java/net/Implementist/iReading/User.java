@@ -5,20 +5,11 @@
  */
 package net.Implementist.iReading;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 /**
  *
  * @author Implementist
  */
 public class User {
-
-    public static void main(String[] args) {
-        Date date = new Date();
-        Timestamp timestamp = new Timestamp(date.getTime());
-        System.out.print(timestamp.toString());
-    }
 
     /**
      * 用户ID
@@ -63,12 +54,12 @@ public class User {
     /**
      * 账号注册的日期时间
      */
-    private Timestamp registrationDateTime;
+    private String registrationDateTime;
 
     /**
      * 上次登录的日期时间
      */
-    private Timestamp lastLoginDateTime;
+    private String lastLoginDateTime;
 
     /**
      * 无参数构造函数
@@ -155,19 +146,19 @@ public class User {
         this.securityStamp = securityStamp;
     }
 
-    public Timestamp getRegistrationDateTime() {
+    public String getRegistrationDateTime() {
         return registrationDateTime;
     }
 
-    public void setRegistrationDateTime(Timestamp registrationDateTime) {
+    public void setRegistrationDateTime(String registrationDateTime) {
         this.registrationDateTime = registrationDateTime;
     }
 
-    public Timestamp getLastLoginDateTime() {
+    public String getLastLoginDateTime() {
         return lastLoginDateTime;
     }
 
-    public void setLastLoginDateTime(Timestamp lastLoginDateTime) {
+    public void setLastLoginDateTime(String lastLoginDateTime) {
         this.lastLoginDateTime = lastLoginDateTime;
     }
 }
