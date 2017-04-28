@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,13 +53,14 @@ public class UserDAO {
             preparedStatement.setString(1, user.getUserName());
             preparedStatement.setString(2, user.getPasswordHash());
             preparedStatement.setString(3, user.getSecurityStamp());
-
-            Date date = new Date();
-            Timestamp timestamp = new Timestamp(date.getTime());
-
-            preparedStatement.setTimestamp(4, timestamp);
-            preparedStatement.setTimestamp(5, timestamp);
-
+            
+            Date date = new Date(System.currentTimeMillis());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String datetime = dateFormat.format(date);
+            
+            preparedStatement.setString(4, datetime);
+            preparedStatement.setString(5, datetime);
+            
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -95,13 +96,14 @@ public class UserDAO {
             preparedStatement.setBoolean(2, true);
             preparedStatement.setString(3, user.getPasswordHash());
             preparedStatement.setString(4, user.getSecurityStamp());
-
-            Date date = new Date();
-            Timestamp timestamp = new Timestamp(date.getTime());
-
-            preparedStatement.setTimestamp(5, timestamp);
-            preparedStatement.setTimestamp(6, timestamp);
-
+            
+            Date date = new Date(System.currentTimeMillis());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String datetime = dateFormat.format(date);
+            
+            preparedStatement.setString(5, datetime);
+            preparedStatement.setString(6, datetime);
+            
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -137,13 +139,14 @@ public class UserDAO {
             preparedStatement.setBoolean(2, true);
             preparedStatement.setString(3, user.getPasswordHash());
             preparedStatement.setString(4, user.getSecurityStamp());
-
-            Date date = new Date();
-            Timestamp timestamp = new Timestamp(date.getTime());
-
-            preparedStatement.setTimestamp(5, timestamp);
-            preparedStatement.setTimestamp(6, timestamp);
-
+            
+            Date date = new Date(System.currentTimeMillis());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String datetime = dateFormat.format(date);
+            
+            preparedStatement.setString(5, datetime);
+            preparedStatement.setString(6, datetime);
+            
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -173,7 +176,7 @@ public class UserDAO {
         try {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
             preparedStatement.setInt(1, userID);
-
+            
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -206,7 +209,7 @@ public class UserDAO {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
             preparedStatement.setString(1, phoneNumber);
             preparedStatement.setInt(2, userID);
-
+            
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -239,7 +242,7 @@ public class UserDAO {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
             preparedStatement.setBoolean(1, phoneNumberVerified);
             preparedStatement.setInt(2, userID);
-
+            
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -272,7 +275,7 @@ public class UserDAO {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
             preparedStatement.setString(1, emailAddress);
             preparedStatement.setInt(2, userID);
-
+            
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -305,7 +308,7 @@ public class UserDAO {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
             preparedStatement.setBoolean(1, emailAddressVerified);
             preparedStatement.setInt(2, userID);
-
+            
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -341,7 +344,7 @@ public class UserDAO {
             preparedStatement.setString(1, passwordHash);
             preparedStatement.setString(2, securityStamp);
             preparedStatement.setInt(3, userID);
-
+            
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -359,7 +362,7 @@ public class UserDAO {
      * @param lastLoginDateTime 新的密码哈希
      * @return 是否成功更新
      */
-    public static Boolean updateLastLoginDateTime(int userID, Timestamp lastLoginDateTime) {
+    public static Boolean updateLastLoginDateTime(int userID, String lastLoginDateTime) {
         //获得数据库的连接对象
         Connection connection = DBManager.getConnection();
         PreparedStatement preparedStatement = null;
@@ -372,9 +375,9 @@ public class UserDAO {
         //设置数据库的字段值
         try {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
-            preparedStatement.setTimestamp(1, lastLoginDateTime);
+            preparedStatement.setString(1, lastLoginDateTime);
             preparedStatement.setInt(2, userID);
-
+            
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -405,7 +408,7 @@ public class UserDAO {
         try {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
             preparedStatement.setInt(1, userID);
-
+            
             resultSet = preparedStatement.executeQuery();
             User user = new User();
             if (resultSet.next()) {
@@ -417,8 +420,8 @@ public class UserDAO {
                 user.setEmailAddressVerified(resultSet.getBoolean("EmailAddressVerified"));
                 user.setPasswordHash(resultSet.getString("PasswordHash"));
                 user.setSecurityStamp(resultSet.getString("SecurityStamp"));
-                user.setRegistrationDateTime(resultSet.getTimestamp("RegistrationDateTime"));
-                user.setLastLoginDateTime(resultSet.getTimestamp("LastLoginDateTime"));
+                user.setRegistrationDateTime(resultSet.getString("RegistrationDateTime"));
+                user.setLastLoginDateTime(resultSet.getString("LastLoginDateTime"));
                 return user;
             } else {
                 return null;
@@ -451,7 +454,7 @@ public class UserDAO {
         try {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
             preparedStatement.setString(1, userName);
-
+            
             resultSet = preparedStatement.executeQuery();
             User user = new User();
             if (resultSet.next()) {
@@ -463,8 +466,8 @@ public class UserDAO {
                 user.setEmailAddressVerified(resultSet.getBoolean("EmailAddressVerified"));
                 user.setPasswordHash(resultSet.getString("PasswordHash"));
                 user.setSecurityStamp(resultSet.getString("SecurityStamp"));
-                user.setRegistrationDateTime(resultSet.getTimestamp("RegistrationDateTime"));
-                user.setLastLoginDateTime(resultSet.getTimestamp("LastLoginDateTime"));
+                user.setRegistrationDateTime(resultSet.getString("RegistrationDateTime"));
+                user.setLastLoginDateTime(resultSet.getString("LastLoginDateTime"));
                 return user;
             } else {
                 return null;
@@ -497,7 +500,7 @@ public class UserDAO {
         try {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
             preparedStatement.setString(1, phoneNumber);
-
+            
             resultSet = preparedStatement.executeQuery();
             User user = new User();
             if (resultSet.next()) {
@@ -509,8 +512,8 @@ public class UserDAO {
                 user.setEmailAddressVerified(resultSet.getBoolean("EmailAddressVerified"));
                 user.setPasswordHash(resultSet.getString("PasswordHash"));
                 user.setSecurityStamp(resultSet.getString("SecurityStamp"));
-                user.setRegistrationDateTime(resultSet.getTimestamp("RegistrationDateTime"));
-                user.setLastLoginDateTime(resultSet.getTimestamp("LastLoginDateTime"));
+                user.setRegistrationDateTime(resultSet.getString("RegistrationDateTime"));
+                user.setLastLoginDateTime(resultSet.getString("LastLoginDateTime"));
                 return user;
             } else {
                 return null;
@@ -543,7 +546,7 @@ public class UserDAO {
         try {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
             preparedStatement.setString(1, emailAddress);
-
+            
             resultSet = preparedStatement.executeQuery();
             User user = new User();
             if (resultSet.next()) {
@@ -555,8 +558,8 @@ public class UserDAO {
                 user.setEmailAddressVerified(resultSet.getBoolean("EmailAddressVerified"));
                 user.setPasswordHash(resultSet.getString("PasswordHash"));
                 user.setSecurityStamp(resultSet.getString("SecurityStamp"));
-                user.setRegistrationDateTime(resultSet.getTimestamp("RegistrationDateTime"));
-                user.setLastLoginDateTime(resultSet.getTimestamp("LastLoginDateTime"));
+                user.setRegistrationDateTime(resultSet.getString("RegistrationDateTime"));
+                user.setLastLoginDateTime(resultSet.getString("LastLoginDateTime"));
                 return user;
             } else {
                 return null;
