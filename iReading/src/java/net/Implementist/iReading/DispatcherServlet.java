@@ -33,6 +33,11 @@ public class DispatcherServlet extends HttpServlet {
                 RequestDispatcher dispatchToRegister = request.getRequestDispatcher("RegisterServlet");
                 dispatchToRegister.forward(request, response);
                 break;
+                
+            case "SearchAllBooks":
+                RequestDispatcher dispatchToSearchAllBooks = request.getRequestDispatcher("SearchAllBooksServlet");
+                dispatchToSearchAllBooks.forward(request, response);
+                break;
         }
     }
 

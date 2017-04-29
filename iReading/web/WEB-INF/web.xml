@@ -12,6 +12,10 @@
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>net.Implementist.iReading.RegisterServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchAllBooksServlet</servlet-name>
+        <servlet-class>net.Implementist.iReading.SearchAllBooksServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DispatcherServlet</servlet-name>
         <url-pattern>/*</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchAllBooksServlet</servlet-name>
+        <url-pattern>/SearchAllBooksServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

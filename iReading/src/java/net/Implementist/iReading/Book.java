@@ -14,7 +14,17 @@ public class Book {
     /**
      * 绘本编号
      */
-    private int serialNumber;
+    private int bookID;
+
+    /**
+     * 总页数
+     */
+    private int pageCount;
+
+    /**
+     * 得分
+     */
+    private float score;
 
     /**
      * 绘本标题
@@ -22,29 +32,24 @@ public class Book {
     private String title;
 
     /**
-     * 类别编码
-     */
-    private int categoryId;
-
-    /**
-     * 内容文件地址
-     */
-    private String contentAdress;
-
-    /**
      * 作者姓名
      */
     private String author;
 
     /**
-     * 上传者ID
+     * 封面URL
      */
-    private int uploaderId;
+    private String coverURL;
 
     /**
-     * 评论文件地址
+     * 内容文件地址
      */
-    private String commentsAdress;
+    private String contentURL;
+
+    /**
+     * 文件名
+     */
+    private String fileName;
 
     /**
      * 无参数构造函数
@@ -52,56 +57,28 @@ public class Book {
     public Book() {
     }
 
-    /**
-     * 六参数构造函数 默认上传者为系统
-     *
-     * @param serialNumber
-     * @param title
-     * @param categoryId
-     * @param contentAdress
-     * @param author
-     * @param commentAdress
-     */
-    public Book(int serialNumber, String title, int categoryId,
-            String contentAdress, String author, String commentAdress) {
-        this.serialNumber = serialNumber;
-        this.title = title;
-        this.categoryId = categoryId;
-        this.contentAdress = contentAdress;
-        this.author = author;
-        this.uploaderId = 1;
-        this.commentsAdress = commentAdress;
+    public int getBookID() {
+        return bookID;
     }
 
-    /**
-     * 全参数构造函数
-     *
-     * @param serialNumber
-     * @param title
-     * @param categoryId
-     * @param contentAdress
-     * @param author
-     * @param uploaderId
-     * @param commentAdress
-     */
-    public Book(int serialNumber, String title, int categoryId,
-            String contentAdress, String author, int uploaderId,
-            String commentAdress) {
-        this.serialNumber = serialNumber;
-        this.title = title;
-        this.categoryId = categoryId;
-        this.contentAdress = contentAdress;
-        this.author = author;
-        this.uploaderId = uploaderId;
-        this.commentsAdress = commentAdress;
+    public void setBookID(int bookID) {
+        this.bookID = bookID;
     }
 
-    public int getSerialNumber() {
-        return serialNumber;
+    public int getPageCount() {
+        return pageCount;
     }
 
-    public void setSerialNumber(int serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
+
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
     }
 
     public String getTitle() {
@@ -112,22 +89,6 @@ public class Book {
         this.title = title;
     }
 
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getContentAdress() {
-        return contentAdress;
-    }
-
-    public void setContentAdress(String contentAdress) {
-        this.contentAdress = contentAdress;
-    }
-
     public String getAuthor() {
         return author;
     }
@@ -136,19 +97,27 @@ public class Book {
         this.author = author;
     }
 
-    public int getUploaderId() {
-        return uploaderId;
+    public String getCoverURL() {
+        return coverURL;
     }
 
-    public void setUploaderId(int uploaderId) {
-        this.uploaderId = uploaderId;
+    public void setCoverURL(String coverURL) {
+        this.coverURL = coverURL;
     }
 
-    public String getCommentsAdress() {
-        return commentsAdress;
+    public String getContentURL() {
+        return contentURL;
     }
 
-    public void setCommentsAdress(String commentsAdress) {
-        this.commentsAdress = commentsAdress;
+    public void setContentURL(String contentURL) {
+        this.contentURL = contentURL;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
