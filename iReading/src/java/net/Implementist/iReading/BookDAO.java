@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * 供类封装图书的数据库进行操作
@@ -32,20 +34,21 @@ public class BookDAO {
 
         //生成SQL代码
         StringBuilder sqlStatement = new StringBuilder();
-        sqlStatement.append("INSERT INTO book(serialNumber,title,categoryId,");
-        sqlStatement.append("contentAdress,author,uploaderId,commentsAdress)");
-        sqlStatement.append(" VALUES(?,?,?,?,?,?,?)");
+        sqlStatement.append("INSERT INTO book(BookID,PageCount,Score,");
+        sqlStatement.append("Title,Author,CoverURL,ContentURL,FileName)");
+        sqlStatement.append(" VALUES(?,?,?,?,?,?,?,?)");
 
         //设置数据库的字段值
         try {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
-            preparedStatement.setInt(1, book.getSerialNumber());
-            preparedStatement.setString(2, book.getTitle());
-            preparedStatement.setInt(3, book.getCategoryId());
-            preparedStatement.setString(4, book.getContentAdress());
+            preparedStatement.setInt(1, book.getBookID());
+            preparedStatement.setInt(2, book.getPageCount());
+            preparedStatement.setFloat(3, book.getScore());
+            preparedStatement.setString(4, book.getTitle());
             preparedStatement.setString(5, book.getAuthor());
-            preparedStatement.setInt(6, book.getUploaderId());
-            preparedStatement.setString(7, book.getCommentsAdress());
+            preparedStatement.setString(6, book.getCoverURL());
+            preparedStatement.setString(7, book.getContentURL());
+            preparedStatement.setString(8, book.getFileName());
 
             preparedStatement.executeUpdate();
             return true;
@@ -58,240 +61,13 @@ public class BookDAO {
     }
 
     /**
-     * 删除给定编号的绘本
+     * 查询数据库中所有绘本
      *
-     * @param serialNumber 给定的绘本编号
-     * @return 是否成功删除
+     * @return 绘本列表
      */
-    public static Boolean deleteBook(int serialNumber) {
-        //获得数据库的连接对象
-        Connection connection = DBManager.getConnection();
-        PreparedStatement preparedStatement = null;
+    public static JSONArray queryAll() {
+        JSONArray books = new JSONArray();
 
-        //生成SQL代码
-        StringBuilder sqlStatement = new StringBuilder();
-        sqlStatement.append("DELETE FROM book WHERE serialNumber=?");
-
-        //设置数据库的字段值
-        try {
-            preparedStatement = connection.prepareStatement(sqlStatement.toString());
-            preparedStatement.setInt(1, serialNumber);
-
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            DBManager.closeAll(connection, preparedStatement, null);
-        }
-    }
-
-    /**
-     * 更改给定编号绘本的标题
-     *
-     * @param serialNumber 给定的绘本编号
-     * @param title 新的标题
-     * @return 是否成功更新
-     */
-    public static Boolean updateTitle(int serialNumber, String title) {
-        //获得数据库的连接对象
-        Connection connection = DBManager.getConnection();
-        PreparedStatement preparedStatement = null;
-
-        //生成SQL代码
-        StringBuilder sqlStatement = new StringBuilder();
-        sqlStatement.append("UPDATE book SET title=?");
-        sqlStatement.append(" WHERE serialNumber=?");
-
-        //设置数据库的字段值
-        try {
-            preparedStatement = connection.prepareStatement(sqlStatement.toString());
-            preparedStatement.setString(1, title);
-            preparedStatement.setInt(2, serialNumber);
-
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            DBManager.closeAll(connection, preparedStatement, null);
-        }
-    }
-
-    /**
-     * 更改给定编号绘本的类别ID
-     *
-     * @param serialNumber 给定的绘本编号
-     * @param categoryId 新的类别ID
-     * @return 是否成功更新
-     */
-    public static Boolean updateCategoryId(int serialNumber, int categoryId) {
-        //获得数据库的连接对象
-        Connection connection = DBManager.getConnection();
-        PreparedStatement preparedStatement = null;
-
-        //生成SQL代码
-        StringBuilder sqlStatement = new StringBuilder();
-        sqlStatement.append("UPDATE book SET categoryId=?");
-        sqlStatement.append(" WHERE serialNumber=?");
-
-        //设置数据库的字段值
-        try {
-            preparedStatement = connection.prepareStatement(sqlStatement.toString());
-            preparedStatement.setInt(1, categoryId);
-            preparedStatement.setInt(2, serialNumber);
-
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            DBManager.closeAll(connection, preparedStatement, null);
-        }
-    }
-
-    /**
-     * 更改给定编号绘本的内容地址
-     *
-     * @param serialNumber 给定的绘本编号
-     * @param contentAdress 新的内容地址
-     * @return 是否成功更新
-     */
-    public static Boolean updateContentAdress(int serialNumber, String contentAdress) {
-        //获得数据库的连接对象
-        Connection connection = DBManager.getConnection();
-        PreparedStatement preparedStatement = null;
-
-        //生成SQL代码
-        StringBuilder sqlStatement = new StringBuilder();
-        sqlStatement.append("UPDATE book SET contentAdress=?");
-        sqlStatement.append(" WHERE serialNumber=?");
-
-        //设置数据库的字段值
-        try {
-            preparedStatement = connection.prepareStatement(sqlStatement.toString());
-            preparedStatement.setString(1, contentAdress);
-            preparedStatement.setInt(2, serialNumber);
-
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            DBManager.closeAll(connection, preparedStatement, null);
-        }
-    }
-
-    /**
-     * 更改给定编号绘本的作者
-     *
-     * @param serialNumber 给定的绘本编号
-     * @param author 新的作者
-     * @return 是否成功更新
-     */
-    public static Boolean updateAuthor(int serialNumber, String author) {
-        //获得数据库的连接对象
-        Connection connection = DBManager.getConnection();
-        PreparedStatement preparedStatement = null;
-
-        //生成SQL代码
-        StringBuilder sqlStatement = new StringBuilder();
-        sqlStatement.append("UPDATE book SET author=?");
-        sqlStatement.append(" WHERE serialNumber=?");
-
-        //设置数据库的字段值
-        try {
-            preparedStatement = connection.prepareStatement(sqlStatement.toString());
-            preparedStatement.setString(1, author);
-            preparedStatement.setInt(2, serialNumber);
-
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            DBManager.closeAll(connection, preparedStatement, null);
-        }
-    }
-
-    /**
-     * 更改给定编号绘本的上传者ID
-     *
-     * @param serialNumber 给定的绘本编号
-     * @param uploaderId 新的上传者ID
-     * @return 是否成功更新
-     */
-    public static Boolean updateUploaderId(int serialNumber, int uploaderId) {
-        //获得数据库的连接对象
-        Connection connection = DBManager.getConnection();
-        PreparedStatement preparedStatement = null;
-
-        //生成SQL代码
-        StringBuilder sqlStatement = new StringBuilder();
-        sqlStatement.append("UPDATE book SET uploaderId=?");
-        sqlStatement.append(" WHERE serialNumber=?");
-
-        //设置数据库的字段值
-        try {
-            preparedStatement = connection.prepareStatement(sqlStatement.toString());
-            preparedStatement.setInt(1, uploaderId);
-            preparedStatement.setInt(2, serialNumber);
-
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            DBManager.closeAll(connection, preparedStatement, null);
-        }
-    }
-
-    /**
-     * 更改给定编号绘本的评论文件地址
-     *
-     * @param serialNumber 给定的绘本编号
-     * @param commentsAdress 新的评论文件地址
-     * @return 是否成功更新
-     */
-    public static Boolean updateCommentsAdress(int serialNumber, String commentsAdress) {
-        //获得数据库的连接对象
-        Connection connection = DBManager.getConnection();
-        PreparedStatement preparedStatement = null;
-
-        //生成SQL代码
-        StringBuilder sqlStatement = new StringBuilder();
-        sqlStatement.append("UPDATE book SET commentsAdress=?");
-        sqlStatement.append(" WHERE serialNumber=?");
-
-        //设置数据库的字段值
-        try {
-            preparedStatement = connection.prepareStatement(sqlStatement.toString());
-            preparedStatement.setString(1, commentsAdress);
-            preparedStatement.setInt(2, serialNumber);
-
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            DBManager.closeAll(connection, preparedStatement, null);
-        }
-    }
-
-    /**
-     * 查询给定编号绘本的详细信息
-     *
-     * @param serialNumber 给定的绘本编号
-     * @return 查询到的封装了详细信息的Book对象
-     */
-    public static Book queryBook(int serialNumber) {
         //获得数据库的连接对象
         Connection connection = DBManager.getConnection();
         PreparedStatement preparedStatement = null;
@@ -299,27 +75,28 @@ public class BookDAO {
 
         //生成SQL代码
         StringBuilder sqlStatement = new StringBuilder();
-        sqlStatement.append("SELECT * FROM book WHERE serialNumber=?");
+        sqlStatement.append("SELECT * FROM book");
 
         //设置数据库的字段值
         try {
             preparedStatement = connection.prepareStatement(sqlStatement.toString());
-            preparedStatement.setInt(1, serialNumber);
-
             resultSet = preparedStatement.executeQuery();
-            Book book = new Book();
-            if (resultSet.next()) {
-                book.setSerialNumber(resultSet.getInt("serialNumber"));
-                book.setTitle(resultSet.getString("title"));
-                book.setCategoryId(resultSet.getInt("categoryId"));
-                book.setContentAdress(resultSet.getString("contentAdress"));
-                book.setAuthor(resultSet.getString("author"));
-                book.setUploaderId(resultSet.getInt("uploaderId"));
-                book.setCommentsAdress(resultSet.getString("commentsAdress"));
-                return book;
-            } else {
-                return null;
+
+            while (resultSet.next()) {
+                JSONObject book = new JSONObject();
+                book.put("BookID", resultSet.getInt("BookID"));
+                book.put("PageCount", resultSet.getInt("PageCount"));
+                book.put("Score", (float) (resultSet.getInt("TotalScore")
+                        / (resultSet.getInt("EvaluatorCount") + 0.0)));
+                book.put("Title", resultSet.getString("Title"));
+                book.put("Author", resultSet.getString("Author"));
+                book.put("CoverURL", resultSet.getString("CoverURL"));
+                book.put("ContentURL", resultSet.getString("ContentURL"));
+                book.put("FileName", resultSet.getString("FileName"));
+
+                books.add(book);
             }
+            return books;
         } catch (SQLException ex) {
             Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
             return null;
